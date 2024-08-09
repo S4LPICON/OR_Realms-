@@ -12,6 +12,7 @@ public class Comandos implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("islands")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
+
                 if (args.length == 0) {
                     player.sendMessage("Uso correcto: /islands crear o /islands tp");
                     return false;
@@ -22,8 +23,13 @@ public class Comandos implements CommandExecutor {
                     player.sendMessage("¡Has creado una isla!");
                     return true;
                 } else if (args[0].equalsIgnoreCase("tp")) {
-                    IslasAdministrador.teleportPlayerToWorld(player);
-                    player.sendMessage("¡Te has teletransportado a tu isla!");
+                    if (args.length >= 2) {
+                        String targetName = args[1].equals(player.getName()) ? player.getName() : args[1];
+                        IslasAdministrador.teleportPlayerToWorld(player, targetName);
+                        player.sendMessage("¡Te has teletransportado a la isla de " + targetName + "!");
+                    } else {
+                        player.sendMessage("Uso correcto: /islands tp <nombreJugador>");
+                    }
                     return true;
                 } else {
                     player.sendMessage("Uso correcto: /islands crear o /islands tp");
