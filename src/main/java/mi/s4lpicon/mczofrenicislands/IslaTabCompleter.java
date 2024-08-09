@@ -24,7 +24,7 @@ public class IslaTabCompleter implements TabCompleter {
             } else if (args.length == 2) {
                 // Completar subcomandos de segundo nivel si es necesario
                 if (args[0].equalsIgnoreCase("tp")) {
-                    completions.add("<nombre_mundo>");
+                    completions.add("<Jugador>");
                 }
             }
         }

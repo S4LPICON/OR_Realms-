@@ -10,11 +10,11 @@ import java.util.Objects;
 
 public class IslasAdministrador implements Listener {
 
-    static ArrayList<JugadorIsla> islas = new ArrayList<>();
+    static ArrayList<JugadorIsla> islasActivas = new ArrayList<>();
 
     public static void crearIsla(Player jugador){
         JugadorIsla isla = new JugadorIsla(jugador, 1, "Esta Isla es la polla", "Gigante");
-        islas.add(isla);
+        islasActivas.add(isla);
         isla.crearMundo();
     }
 

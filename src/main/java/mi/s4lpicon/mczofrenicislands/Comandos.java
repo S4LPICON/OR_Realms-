@@ -28,6 +28,7 @@ public class Comandos implements CommandExecutor {
                         IslasAdministrador.teleportPlayerToWorld(player, targetName);
                         player.sendMessage("¡Te has teletransportado a la isla de " + targetName + "!");
                     } else {
+                        //Lo deberia teletrasnporta a su propia isla
                         player.sendMessage("Uso correcto: /islands tp <nombreJugador>");
                     }
                     return true;
