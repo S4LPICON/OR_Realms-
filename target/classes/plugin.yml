@@ -1,0 +1,13 @@
+name: MCzofrenic-Islands
+version: '0.0.1'
+main: mi.s4lpicon.mczofrenicislands.MCzofrenic_Islands
+api-version: '1.21'
+authors:
+  - S4LPICON
+  - Phancha
+description: Administrador de islas de jugadores
+
+commands:
+  islands:
+    description: Comando principal de MCzofrenic-Islands.
+    usage: /<command> <Args>

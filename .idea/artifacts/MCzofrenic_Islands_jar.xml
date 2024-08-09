@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="MCzofrenic-Islands:jar">
+    <output-path>$PROJECT_DIR$/../../.A MCzofrenic Network Projet/3 GAME/plugins</output-path>
+    <root id="archive" name="MCzofrenic-Islands.jar">
+      <element id="module-output" name="MCzofrenic-Islands" />
+    </root>
+  </artifact>
+</component>
