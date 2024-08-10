@@ -11,3 +11,8 @@ commands:
   island:
     description: MCzofrenic-Islands Main Command.
     usage: /<command> <Args>
+  spawn:
+    description: Teleport to the server spawn.
+    usage: /<command> <Args>
+  devinfo:
+    description: De-bug Information

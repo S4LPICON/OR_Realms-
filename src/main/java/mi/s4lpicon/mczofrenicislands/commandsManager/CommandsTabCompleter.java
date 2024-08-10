@@ -24,6 +24,7 @@ public class CommandsTabCompleter implements TabCompleter {
                 completions.add("create");
                 completions.add("tp");
                 completions.add("ban");
+                completions.add("setSpawn");
             }if (args.length == 2 && args[0].equalsIgnoreCase("tp")) {
                 List<String> playerNames = new ArrayList<>();
                 for (Player player : Bukkit.getOnlinePlayers()) {

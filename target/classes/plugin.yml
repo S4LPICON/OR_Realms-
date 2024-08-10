@@ -5,9 +5,14 @@ api-version: '1.21'
 authors:
   - S4LPICON
   - Phancha
-description: Administrador de islas de jugadores
+description: Player Island Manager
 
 commands:
-  islands:
-    description: Comando principal de MCzofrenic-Islands.
+  island:
+    description: MCzofrenic-Islands Main Command.
     usage: /<command> <Args>
+  spawn:
+    description: Teleport to the server spawn.
+    usage: /<command> <Args>
+  devinfo:
+    description: De-bug Information

@@ -1,6 +1,6 @@
 package mi.s4lpicon.mczofrenicislands.commandsManager;
 
-import mi.s4lpicon.mczofrenicislands.islandsManagers.IslandsManager;
+import mi.s4lpicon.mczofrenicislands.islandsManager.IslandsManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -37,6 +37,10 @@ public class CommandsManager implements CommandExecutor {
                     }
                     return true;
 
+                } else if (args[0].equalsIgnoreCase("setSpawn")) {
+                    IslandsManager.setIslandSpawn(player);
+                    return true;
+
                 } else {
                     player.sendMessage("Correct use: /island create or /island tp");
                     return false;
@@ -44,6 +48,20 @@ public class CommandsManager implements CommandExecutor {
             } else {
                 sender.sendMessage("This command can only be executed by one player.");
                 return false;
+            }
+        }
+        if (command.getName().equalsIgnoreCase("spawn")) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                IslandsManager.sendPlayerToSpawn(player, "LaCapital");
+                player.sendMessage("You have teleported to spawn!");
+            }
+        }
+
+        if (command.getName().equalsIgnoreCase("devinfo")) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                IslandsManager.getDevInfo(player);
             }
         }
         return false;
