@@ -11,12 +11,12 @@ public class CommandsManager implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, Command command, @NotNull String label, String[] args) {
-        if (command.getName().equalsIgnoreCase("islands")) {
+        if (command.getName().equalsIgnoreCase("island")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
 
                 if (args.length == 0) {
-                    player.sendMessage("Correct use: /islands <args>");
+                    player.sendMessage("Correct use: /island <args>");
                     return false;
                 }
 
@@ -38,7 +38,7 @@ public class CommandsManager implements CommandExecutor {
                     return true;
 
                 } else {
-                    player.sendMessage("Correct use: /islands create or /islands tp");
+                    player.sendMessage("Correct use: /island create or /island tp");
                     return false;
                 }
             } else {

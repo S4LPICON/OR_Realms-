@@ -14,9 +14,9 @@ public final class MCzofrenic_Islands extends JavaPlugin {
     @Override
     public void onEnable() {
         // plugin startup logic
-        Objects.requireNonNull(this.getCommand("islands")).setExecutor(new CommandsManager());
+        Objects.requireNonNull(this.getCommand("island")).setExecutor(new CommandsManager());
         // Register the TabCompleter
-        Objects.requireNonNull(getCommand("islands")).setTabCompleter(new CommandsTabCompleter());
+        Objects.requireNonNull(getCommand("island")).setTabCompleter(new CommandsTabCompleter());
         // Log events
         PluginManager pm = getServer().getPluginManager();
         //pm.registerEvents(new Manager(), this);
