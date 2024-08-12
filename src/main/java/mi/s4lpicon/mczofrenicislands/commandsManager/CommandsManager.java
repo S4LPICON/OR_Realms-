@@ -20,6 +20,7 @@ public class CommandsManager implements CommandExecutor {
                     return false;
                 }
 
+                //THE SUBCOMMANDS
                 if (args[0].equalsIgnoreCase("create")) {
 
                     IslandsManager.buildIsland(player);
@@ -37,11 +38,28 @@ public class CommandsManager implements CommandExecutor {
                     }
                     return true;
 
-                } else if (args[0].equalsIgnoreCase("setSpawn")) {
+                } else if (args[0].equalsIgnoreCase("setspawn")) {
                     IslandsManager.setIslandSpawn(player);
                     return true;
 
-                } else {
+                } else if (args[0].equalsIgnoreCase("ban")) {
+                    if (args.length >= 2) {
+                        IslandsManager.banPlayerOfIsland(player, args[1]);
+
+                    } else {
+                        player.sendMessage("Write the name of a player to ban him!");
+                    }
+                    return true;
+
+                }else if (args[0].equalsIgnoreCase("unban")) {
+                    if (args.length >= 2) {
+                        IslandsManager.unBanPlayerOfIsland(player, args[1]);
+                    } else {
+                        player.sendMessage("Write the name of a player to unban him!");
+                    }
+                    return true;
+
+                }else {
                     player.sendMessage("Correct use: /island create or /island tp");
                     return false;
                 }
@@ -53,7 +71,7 @@ public class CommandsManager implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("spawn")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
-                IslandsManager.sendPlayerToSpawn(player, "LaCapital");
+                IslandsManager.sendPlayerToSpawn(player);
                 player.sendMessage("You have teleported to spawn!");
             }
         }

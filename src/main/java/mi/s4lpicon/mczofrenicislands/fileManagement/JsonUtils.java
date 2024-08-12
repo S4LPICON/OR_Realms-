@@ -13,7 +13,8 @@ public class JsonUtils {
 
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    public static void guardarJugadorIslaEnJson(PlayerIsland jugadorIsla, String rutaArchivo) {
+    public static void guardarJugadorIslaEnJson(PlayerIsland jugadorIsla) {
+        String rutaArchivo = "plugins/MCzofrenic-Islands/" + jugadorIsla.getOwnerName() + "_island.json";
         // Crear una instancia de Gson con configuración para incluir solo campos anotados con @Expose
         // y formatear el JSON de manera legible.
         Gson gson = new GsonBuilder()

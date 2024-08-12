@@ -1,14 +1,24 @@
 package mi.s4lpicon.mczofrenicislands.islandsManager;
 
 import com.google.gson.annotations.Expose;
+import mi.s4lpicon.mczofrenicislands.fileManagement.JsonUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class PlayerIsland {
 
     private Player owner;
     @Expose
     private String ownerName;
+    @Expose
+    private final ArrayList<String> bannedPlayers = new ArrayList<>();
+    @Expose
+    private final ArrayList<String> residentPlayers = new ArrayList<>();
+    @Expose
+    private final ArrayList<String> trustedPlayers = new ArrayList<>();
     @Expose
     private int id;
     @Expose
@@ -19,15 +29,27 @@ public class PlayerIsland {
     private String size;
     private World theWorld;
 
-    public PlayerIsland(Player player, int id, String type, String size){
-        this.owner = player;
+    public PlayerIsland(String player, int id, String type, String size){
+        this.owner = Bukkit.getPlayer(player);
         this.id = id;
         this.type = type;
         this.size = size;
-        this.ownerName = player.getName();
+        this.ownerName = player;
+        this.spawn_x = 0;
+        this.spawn_z = 0;
         generateWorld();
+        this.spawn_y = theWorld.getHighestBlockYAt(0, 0);
     }
 
+    public void vefOwner(){
+        if (this.owner == null){
+            this.owner = Bukkit.getPlayer(this.ownerName);
+        }
+    }
+
+    public void saveInfo(){
+        JsonUtils.guardarJugadorIslaEnJson(this);
+    }
     public void generateWorld() {
         // Specify the world name
         String worldName = "PlayerIslands/" + this.owner.getName();
@@ -61,6 +83,56 @@ public class PlayerIsland {
         } else {
             owner.sendMessage("Error creating the world.");
         }
+    }
+
+
+    public void banPlayer(String player){
+        vefOwner();
+        if (player.equals(this.ownerName)){
+            this.owner.sendMessage("No puedes banearte de tu propia isla!");
+            return;
+        }
+        if (findBannedPlayer(player) != -1){
+            this.owner.sendMessage("Este jugador ya esta baneado!");
+            return;
+        }
+        Player playerBanned = Bukkit.getPlayer(player);
+        // Obtén el mundo del jugador
+        World playerWorld = Objects.requireNonNull(playerBanned).getWorld();
+
+        // Compara el nombre del mundo con el nombre que estás buscando
+        if(playerWorld.getName().equals("PlayerIslands/" +this.ownerName)){
+            IslandsManager.sendPlayerToSpawn(Objects.requireNonNull(playerBanned));
+            playerBanned.sendMessage("Te han baneado de esta isla!, enviandote al spawn!");
+        }
+        this.bannedPlayers.add(player);
+        this.owner.sendMessage("Has baneado a "+player);
+        saveInfo();
+    }
+
+    public void unBanPlayer(String player){
+        vefOwner();
+        if (player.equals(this.ownerName)){
+            this.owner.sendMessage("No puedes banearte de tu propia isla!");
+            return;
+        }
+        if (findBannedPlayer(player) == -1){
+            this.owner.sendMessage("Aun no has baneado a este jugador!");
+            return;
+        }
+
+        this.bannedPlayers.remove(findBannedPlayer(player));
+        this.owner.sendMessage("Has desbaneado a "+player);
+        saveInfo();
+    }
+
+    public int findBannedPlayer(String player){
+        for(String name : bannedPlayers){
+            if (name.equals(player)){
+                return bannedPlayers.indexOf(name);
+            }
+        }
+        return -1;
     }
 
     // Getters and setters

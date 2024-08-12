@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 /*
 NO BORRAR ESTA INFORMATION HASTA NO SER IMPLEMENTADA
-metodo para descargar un mundo
+modo para descargar un mundo
 
 World world = Bukkit.getWorld("nombre_del_mundo");
 if (world != null) {
@@ -18,7 +18,7 @@ if (world != null) {
 }
 
 
-metodo para saber cuantos jugadores hay en un mundo
+modo para saber cuantos jugadores hay en un mundo
 World world = Bukkit.getWorld("nombre_del_mundo");
 if (world != null) {
     int playerCount = world.getPlayers().size();
@@ -30,8 +30,18 @@ public class IslandsManager implements Listener {
 
     public static ArrayList<PlayerIsland> activeIslands = new ArrayList<>();
 
-    public static void getDevInfo(Player player){
-        player.sendMessage( "Active Islands: "+ activeIslands);
+    public static void getDevInfo(Player player) {
+        StringBuilder active = new StringBuilder();
+        for (PlayerIsland island : activeIslands) {
+            active.append(island.getOwnerName()).append(", ");
+        }
+
+        // Elimina la última coma y espacio si hay islas activas
+        if (active.length() > 0) {
+            active.setLength(active.length() - 2);
+        }
+
+        player.sendMessage("Active Islands: " + active);
     }
 
     @SuppressWarnings("deprecation")
@@ -41,16 +51,62 @@ public class IslandsManager implements Listener {
             player.sendMessage(ChatColor.RED+"Ya tienes un mundo creado no se puede crear otro!");
             return;
         }
-        PlayerIsland island = new PlayerIsland(player, 1, "Esta Isla es la polla", "Gigante");
+        PlayerIsland island = new PlayerIsland(player.getName(), 1, "Esta Isla es la polla", "Gigante");
         activeIslands.add(island);
         // Guardar el objeto en un archivo JSON
         sendPlayerToWorld(player, player.getName());
-        JsonUtils.guardarJugadorIslaEnJson(island, "plugins/MCzofrenic-Islands/"+player.getName()+"_island.json");
+        JsonUtils.guardarJugadorIslaEnJson(island);
         player.sendMessage("You have created an island!");
+    }
+
+    public static PlayerIsland vefAndLoadIsland(Player owner){
+        if (Bukkit.getWorld("PlayerIslands/" + owner.getName()) == null){
+            return null;
+        }
+        int pos = findIsland(owner);
+        if (pos == -1){
+            loadIsland(owner, owner.getName());
+            return activeIslands.get(findIsland(owner));
+        }else {
+            return activeIslands.get(pos);
+        }
+    }
+
+    public static void banPlayerOfIsland(Player owner, String bannedPlayer){
+        PlayerIsland island = vefAndLoadIsland(owner);
+        if (island != null) {
+            island.banPlayer(bannedPlayer);
+        }else {
+            owner.sendMessage("you don't have an active island!");
+        }
+    }
+
+    public static void unBanPlayerOfIsland(Player owner, String unBannedPlayer){
+        PlayerIsland island = vefAndLoadIsland(owner);
+        if (island != null) {
+            island.unBanPlayer(unBannedPlayer);
+        }else {
+            owner.sendMessage("you don't have an active island!");
+        }
     }
 
     @SuppressWarnings("deprecation")
     public static void sendPlayerToWorld(Player player, String worldName) {
+        Player playerIslandOwner = Bukkit.getPlayer(worldName);
+        int islandPos = findIsland(playerIslandOwner);
+
+        if( islandPos == -1 && !(player.getName().equals(worldName))){
+            player.sendMessage("¡Error, the island is disabled");
+            return;
+        }
+
+        if (islandPos != -1) {
+            if (activeIslands.get(islandPos).findBannedPlayer(player.getName()) != -1) {
+                player.sendMessage("¡Error, you are banned from this island!");
+                return;
+            }
+        }
+
         World world;
         // Get the world by name
         if (worldName.equals(player.getName())) {
@@ -63,7 +119,7 @@ public class IslandsManager implements Listener {
 
         // If the world is not loaded, try to load it
         if (world == null) {
-            world = loadWorld(player, worldName);
+            world = loadIsland(player, worldName);
             player.sendMessage(ChatColor.RED + "The world was unloaded!"
                     + ChatColor.GREEN + "\nLoading World...");
             if (world == null) {
@@ -71,18 +127,14 @@ public class IslandsManager implements Listener {
                 return;
             }
         }
-        int islandPos = findIsland(player);
-        if (islandPos != -1) {
-            PlayerIsland island = JsonUtils.leerJugadorIslaDesdeJson("plugins/MCzofrenic-Islands/"+player.getName()+"_island.json");
-            if(island != null) {
-                activeIslands.set(islandPos, island); //cargar el archivo por existen cambios
-                x = activeIslands.get(islandPos).getSpawnX();
-                y = activeIslands.get(islandPos).getSpawnY();
-                z = activeIslands.get(islandPos).getSpawnZ();
-            }
-        }else {
-            player.sendMessage("No se encontro una isla con el metodo");
+        PlayerIsland island = JsonUtils.leerJugadorIslaDesdeJson("plugins/MCzofrenic-Islands/"+player.getName()+"_island.json");
+        if(island != null && islandPos != -1) {
+            activeIslands.set(islandPos, island); //cargar el archivo por si existen cambios
+            x = activeIslands.get(islandPos).getSpawnX();
+            y = activeIslands.get(islandPos).getSpawnY();
+            z = activeIslands.get(islandPos).getSpawnZ();
         }
+
         // Set the location in the world (0, 0, 0)
         Location location = new Location(world, x, y, z);
 
@@ -90,7 +142,8 @@ public class IslandsManager implements Listener {
         player.teleport(location);
         player.sendMessage("You have teleported to the " + worldName + "'s island!");
     }
-    public static void sendPlayerToSpawn(Player player, String spawnName){
+    public static void sendPlayerToSpawn(Player player){
+        String spawnName = "LaCapital";
         double x = 10,y= -59,z=23;
         // Set the location in the world (0, 0, 0)
         World world = Bukkit.getWorld(spawnName);
@@ -102,7 +155,7 @@ public class IslandsManager implements Listener {
         player.teleport(location);
     }
 
-    public static World loadWorld(Player player, String worldName) {
+    public static World loadIsland(Player player, String worldName) {
         PlayerIsland island = JsonUtils.leerJugadorIslaDesdeJson("plugins/MCzofrenic-Islands/"+player.getName()+"_island.json");
         activeIslands.add(island);
         player.sendMessage("Active islands before load world: "+activeIslands);
@@ -135,8 +188,6 @@ public class IslandsManager implements Listener {
 
     public static void setIslandSpawn(Player player){
         if (!(player.getWorld().getName().equals("PlayerIslands/"+player.getName()))){
-            player.sendMessage("Mundo actual: "+ player.getWorld().getName());
-            player.sendMessage("Nombre jugador: "+player.getName());
             player.sendMessage("Debes estar en tu propia isla para utilizar este comando!");
             return;
         }
@@ -157,7 +208,7 @@ public class IslandsManager implements Listener {
         isla.setSpawnX(x);
         isla.setSpawnY(y);
         isla.setSpawnZ(z);
-        JsonUtils.guardarJugadorIslaEnJson(isla,"plugins/MCzofrenic-Islands/"+player.getName()+"_island.json");
-        player.sendMessage("Has designado el spawn con exito!");
+        JsonUtils.guardarJugadorIslaEnJson(isla);
+        player.sendMessage("Has designado el spawn con éxito!");
     }
 }
