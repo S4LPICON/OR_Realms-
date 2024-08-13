@@ -20,7 +20,10 @@ public class IslandsPermissions {
         }
     }
 
-    public static boolean playerCanDoThis(Player player){
+    public static boolean blockActionPlayer(Player player){
+        if(player.isOp() || player.hasPermission("mczofrenicisland.admin")){
+            return false;
+        }
         String playerOwnerName = IslandsPermissions.getStringAfterSlash(player.getWorld().getName());
         Player islandOwner = Bukkit.getPlayer(playerOwnerName);
         assert islandOwner != null;
