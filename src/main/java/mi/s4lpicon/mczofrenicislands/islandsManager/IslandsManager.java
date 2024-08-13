@@ -115,6 +115,12 @@ public class IslandsManager implements Listener {
     }
 
     public static void banPlayerOfIsland(Player owner, String bannedPlayer){
+        Player player2Ban = Bukkit.getPlayer(bannedPlayer);
+        assert player2Ban != null;
+        if(player2Ban.isOp() || player2Ban.hasPermission("mczofrenicisland.admin")){
+            owner.sendMessage("No puedes banear a un administrador!");
+            return ;
+        }
         PlayerIsland island = vefAndLoadIsland(owner);
         if (island != null) {
             island.banPlayer(bannedPlayer);
@@ -143,7 +149,8 @@ public class IslandsManager implements Listener {
         }
 
         if (islandPos != -1) {
-            if (activeIslands.get(islandPos).findBannedPlayer(player.getName()) != -1) {
+            if (activeIslands.get(islandPos).findBannedPlayer(player.getName()) != -1
+                && !player.isOp() || !player.hasPermission("mczofrenicisland.admin")){
                 player.sendMessage("¡Error, you are banned from this island!");
                 return;
             }
