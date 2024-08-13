@@ -15,7 +15,7 @@ public class DamageEntityListener implements Listener {
             Entity target = event.getEntity();
 
             // Verifica si el jugador tiene permisos
-            if (IslandsPermissions.playerCanDoThis(player)) {
+            if (IslandsPermissions.blockActionPlayer(player)) {
 
                 // Permitir atacar solo mobs hostiles
                 if (isHostileMob(target)) {
