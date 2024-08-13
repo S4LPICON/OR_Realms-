@@ -11,11 +11,16 @@ import org.bukkit.event.block.BlockBreakEvent;
 public class BlockBreakListener implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
+
         Player player = event.getPlayer();
+
         String playerOwnerName = IslandsPermissions.getStringAfterSlash(player.getWorld().getName());
-        int pos = IslandsManager.findIsland(Bukkit.getPlayer(playerOwnerName));
+        Player islandOwner = Bukkit.getPlayer(playerOwnerName);
+        assert islandOwner != null;
+        IslandsManager.vefAndLoadIsland(islandOwner);
+        int pos = IslandsManager.findIsland(islandOwner);
         if (pos == -1){
-            player.sendMessage("Mega error detectado reportalo!"); //es imposible que el mundo en el que esta, este descargado
+            player.sendMessage("Mega error detectado reportalo!"); //es imposible que el mundo en el que se encuentra, esté descargado
             return;
         }
         if (IslandsManager.activeIslands.get(pos).hasPermissions(player.getName()) <= 1
