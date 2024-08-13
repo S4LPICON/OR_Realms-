@@ -1,7 +1,6 @@
 package mi.s4lpicon.mczofrenicislands.islandsManager;
 
 import com.google.gson.annotations.Expose;
-import mi.s4lpicon.mczofrenicislands.fileManagement.JsonUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
@@ -95,9 +94,6 @@ public class PlayerIsland {
         }
     }
 
-    public void saveInfo(){
-        JsonUtils.guardarJugadorIslaEnJson(this);
-    }
     public void generateWorld() {
         // Specify the world name
         String worldName = "PlayerIslands/" + this.owner.getName();
@@ -153,8 +149,8 @@ public class PlayerIsland {
             playerBanned.sendMessage("Te han baneado de esta isla!, enviandote al spawn!");
         }
         this.bannedPlayers.add(player);
+        removePlayerMember(player);
         this.owner.sendMessage("Has baneado a "+player);
-        saveInfo();
     }
 
     public void unBanPlayer(String player){
@@ -170,7 +166,6 @@ public class PlayerIsland {
 
         this.bannedPlayers.remove(findBannedPlayer(player));
         this.owner.sendMessage("Has desbaneado a "+player);
-        saveInfo();
     }
 
     public int findBannedPlayer(String player){
