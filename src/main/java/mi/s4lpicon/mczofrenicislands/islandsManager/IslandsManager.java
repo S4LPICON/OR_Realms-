@@ -56,6 +56,7 @@ public class IslandsManager implements Listener {
             return;
         }
         activeIslands.get(pos).removePlayerMember(player);
+        playerOwner.sendMessage("Se ha eliminado el jugador "+ playerToRemove.getName()+" de la isla!");
     }
 
     public static void invitePlayerToIsland(String player, String owner, int levelPermission){
