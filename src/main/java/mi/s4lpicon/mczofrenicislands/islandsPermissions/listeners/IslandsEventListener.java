@@ -13,49 +13,49 @@ public class IslandsEventListener implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (IslandsPermissions.playerCanDoThis(event.getPlayer())) {
+        if (IslandsPermissions.blockActionPlayer(event.getPlayer())) {
             event.setCancelled(true); // Cancela el evento, evitando que el jugador rompa bloques
         }
     }
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (IslandsPermissions.playerCanDoThis(event.getPlayer())) {
+        if (IslandsPermissions.blockActionPlayer(event.getPlayer())) {
             event.setCancelled(true); // Cancela el evento, evitando que el jugador coloque bloques
         }
     }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (IslandsPermissions.playerCanDoThis(event.getPlayer())) {
+        if (IslandsPermissions.blockActionPlayer(event.getPlayer())) {
             event.setCancelled(true); // Cancela el evento, evitando que el jugador interactúe con bloques
         }
     }
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        if (IslandsPermissions.playerCanDoThis(event.getPlayer())) {
+        if (IslandsPermissions.blockActionPlayer(event.getPlayer())) {
             event.setCancelled(true); // Cancela el evento, evitando que el jugador interactúe con entidades
         }
     }
 
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent event) {
-        if (IslandsPermissions.playerCanDoThis((Player) event.getPlayer())) {
+        if (IslandsPermissions.blockActionPlayer((Player) event.getPlayer())) {
             event.setCancelled(true); // Cancela el evento, evitando que el jugador abra inventarios
         }
     }
 
     @EventHandler
     public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
-        if (IslandsPermissions.playerCanDoThis(event.getPlayer())) {
+        if (IslandsPermissions.blockActionPlayer(event.getPlayer())) {
             event.setCancelled(true); // Cancela el evento, evitando que el jugador vacíe un balde
         }
     }
 
     @EventHandler
     public void onPlayerBucketFill(PlayerBucketFillEvent event) {
-        if (IslandsPermissions.playerCanDoThis(event.getPlayer())) {
+        if (IslandsPermissions.blockActionPlayer(event.getPlayer())) {
             event.setCancelled(true); // Cancela el evento, evitando que el jugador llene un balde
         }
     }
