@@ -70,8 +70,9 @@ public class PlayerIsland {
             trustedPlayers.add(player);
         }else {
             this.owner.sendMessage("Ese nivel de permisos no existe!");
+            return;
         }
-        this.owner.sendMessage("Añadido");
+        this.owner.sendMessage("Se ha añadido correctamente a "+ player+"!");
     }
 
     public void removePlayerMember(String player){
@@ -79,7 +80,6 @@ public class PlayerIsland {
         int levelPermission = hasPermissions(player);
         if (levelPermission < 1){
             this.owner.sendMessage("Este jugador no tiene permisos en tu isla!");
-            return;
         } else if (levelPermission == 1) {
             residentPlayers.removeIf(name -> name.equals(player));
         } else if (levelPermission == 2) {
