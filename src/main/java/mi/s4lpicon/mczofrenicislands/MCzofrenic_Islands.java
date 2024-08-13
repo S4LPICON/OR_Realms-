@@ -2,6 +2,9 @@ package mi.s4lpicon.mczofrenicislands;
 
 import mi.s4lpicon.mczofrenicislands.commandsManager.CommandsManager;
 import mi.s4lpicon.mczofrenicislands.commandsManager.CommandsTabCompleter;
+import mi.s4lpicon.mczofrenicislands.fileManagement.JsonUtils;
+import mi.s4lpicon.mczofrenicislands.islandsManager.IslandsManager;
+import mi.s4lpicon.mczofrenicislands.islandsManager.PlayerIsland;
 import mi.s4lpicon.mczofrenicislands.islandsPermissions.listeners.BlockBreakListener;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
@@ -32,6 +35,16 @@ public final class MCzofrenic_Islands extends JavaPlugin {
     @Override
     public void onDisable() {
         // Logica cuando el plugin es deshabilitado
+        saveAllInfo();
         getLogger().info("The plugin has been successfully disabled");
+    }
+
+
+    public void saveAllInfo(){
+        //save all island info in json
+        for (PlayerIsland island : IslandsManager.activeIslands){
+            JsonUtils.guardarJugadorIslaEnJson(island);
+        }
+
     }
 }
