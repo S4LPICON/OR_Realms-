@@ -46,6 +46,11 @@ public class IslandsManager implements Listener {
         Player playerToRemove = Bukkit.getPlayer(player);
         Player playerOwner = Bukkit.getPlayer(owner);
         assert playerOwner != null;
+        PlayerIsland island = vefAndLoadIsland(playerOwner);
+        if (island == null){
+            playerOwner.sendMessage("Error tu isla es nula!");
+            return;
+        }
         if(playerToRemove == null){
             playerOwner.sendMessage("Error con el jugador a eliminar");
             return;
@@ -60,6 +65,7 @@ public class IslandsManager implements Listener {
     }
 
     public static void invitePlayerToIsland(String player, String owner, int levelPermission){
+
         Player playerToInvite = Bukkit.getPlayer(player);
         Player playerOwner = Bukkit.getPlayer(owner);
         int pos = findIsland(playerOwner);
@@ -67,7 +73,18 @@ public class IslandsManager implements Listener {
             playerOwner.sendMessage("Error al invitar el jugador a la isla");
             return;
         }
-        activeIslands.get(pos).addPlayerMember(player, levelPermission);
+        if (activeIslands.get(pos).findBannedPlayer(player) != -1){
+            assert playerOwner != null;
+            playerOwner.sendMessage("El jugador se encuentra baneado de tu isla!");
+            return;
+        }
+        assert playerOwner != null;
+        PlayerIsland island = vefAndLoadIsland(playerOwner);
+        if (island != null) {
+            activeIslands.get(pos).addPlayerMember(player, levelPermission);
+        }else {
+            playerOwner.sendMessage("you don't have an active island!");
+        }
     }
 
     @SuppressWarnings("deprecation")
@@ -81,7 +98,6 @@ public class IslandsManager implements Listener {
         activeIslands.add(island);
         // Guardar el objeto en un archivo JSON
         sendPlayerToWorld(player, player.getName());
-        JsonUtils.guardarJugadorIslaEnJson(island);
         player.sendMessage("You have created an island!");
     }
 
@@ -230,7 +246,6 @@ public class IslandsManager implements Listener {
         isla.setSpawnX(x);
         isla.setSpawnY(y);
         isla.setSpawnZ(z);
-        JsonUtils.guardarJugadorIslaEnJson(isla);
         player.sendMessage("Has designado el spawn con éxito!");
     }
 }
