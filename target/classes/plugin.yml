@@ -16,3 +16,8 @@ commands:
     usage: /<command> <Args>
   devinfo:
     description: De-bug Information
+
+permissions:
+  mczofrenicisland.admin:
+    description: "Permite al jugador administrar el plugin"
+    default: op
