@@ -5,6 +5,7 @@ import mi.s4lpicon.mczofrenicislands.commandsManager.CommandsTabCompleter;
 import mi.s4lpicon.mczofrenicislands.fileManagement.JsonUtils;
 import mi.s4lpicon.mczofrenicislands.islandsManager.IslandsManager;
 import mi.s4lpicon.mczofrenicislands.islandsManager.PlayerIsland;
+import mi.s4lpicon.mczofrenicislands.islandsPermissions.listeners.DamageEntityListener;
 import mi.s4lpicon.mczofrenicislands.islandsPermissions.listeners.IslandsEventListener;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
@@ -19,6 +20,7 @@ public final class MCzofrenic_Islands extends JavaPlugin {
     public void onEnable() {
         // Registro de listeners
         getServer().getPluginManager().registerEvents(new IslandsEventListener(), this);
+        getServer().getPluginManager().registerEvents(new DamageEntityListener(), this);
         // plugin startup logic
         Objects.requireNonNull(this.getCommand("island")).setExecutor(new CommandsManager());
         Objects.requireNonNull(this.getCommand("spawn")).setExecutor(new CommandsManager());

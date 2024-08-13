@@ -6,8 +6,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.*;
 
@@ -42,16 +40,6 @@ public class IslandsEventListener implements Listener {
     }
 
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getWhoClicked() instanceof Player) {
-            Player player = (Player) event.getWhoClicked();
-            if (IslandsPermissions.playerCanDoThis(player)) {
-                event.setCancelled(true); // Cancela el evento, evitando que el jugador manipule inventarios
-            }
-        }
-    }
-
-    @EventHandler
     public void onInventoryOpen(InventoryOpenEvent event) {
         if (IslandsPermissions.playerCanDoThis((Player) event.getPlayer())) {
             event.setCancelled(true); // Cancela el evento, evitando que el jugador abra inventarios
@@ -72,15 +60,7 @@ public class IslandsEventListener implements Listener {
         }
     }
 
-    @EventHandler
-    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Player) {
-            Player player = (Player) event.getDamager();
-            if (IslandsPermissions.playerCanDoThis(player)) {
-                event.setCancelled(true); // Cancela el evento, evitando que el jugador dañe entidades
-            }
-        }
-    }
+
 
 
 }
