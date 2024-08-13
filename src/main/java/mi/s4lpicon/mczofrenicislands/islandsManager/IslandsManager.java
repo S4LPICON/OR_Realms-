@@ -30,18 +30,43 @@ public class IslandsManager implements Listener {
 
     public static ArrayList<PlayerIsland> activeIslands = new ArrayList<>();
 
+    public static void getDevInfo(Player player, int pos) {
+        if (activeIslands.get(pos) != null) {
+            player.sendMessage("Active Islands: " + activeIslands.get(pos).toString());
+        }else {
+            player.sendMessage("Esa pocision de isla no existe");
+        }
+    }
     public static void getDevInfo(Player player) {
-        StringBuilder active = new StringBuilder();
-        for (PlayerIsland island : activeIslands) {
-            active.append(island.getOwnerName()).append(", ");
-        }
 
-        // Elimina la última coma y espacio si hay islas activas
-        if (active.length() > 0) {
-            active.setLength(active.length() - 2);
-        }
+        player.sendMessage("Active Islands: " + activeIslands);
+    }
 
-        player.sendMessage("Active Islands: " + active);
+    public static void removePlayerOfIsland(String player, String owner){
+        Player playerToRemove = Bukkit.getPlayer(player);
+        Player playerOwner = Bukkit.getPlayer(owner);
+        assert playerOwner != null;
+        if(playerToRemove == null){
+            playerOwner.sendMessage("Error con el jugador a eliminar");
+            return;
+        }
+        int pos = findIsland(playerOwner);
+        if (pos == -1){
+            playerOwner.sendMessage("Error al remover jugador de la isla");
+            return;
+        }
+        activeIslands.get(pos).removePlayerMember(player);
+    }
+
+    public static void invitePlayerToIsland(String player, String owner, int levelPermission){
+        Player playerToInvite = Bukkit.getPlayer(player);
+        Player playerOwner = Bukkit.getPlayer(owner);
+        int pos = findIsland(playerOwner);
+        if (pos == -1 && playerOwner != null){
+            playerOwner.sendMessage("Error al invitar el jugador a la isla");
+            return;
+        }
+        activeIslands.get(pos).addPlayerMember(player, levelPermission);
     }
 
     @SuppressWarnings("deprecation")
@@ -107,13 +132,7 @@ public class IslandsManager implements Listener {
             }
         }
 
-        World world;
-        // Get the world by name
-        if (worldName.equals(player.getName())) {
-            world = Bukkit.getWorld("PlayerIslands/" + worldName);
-        } else {
-            world = Bukkit.getWorld(worldName);
-        }
+        World world = Bukkit.getWorld("PlayerIslands/" + worldName);
 
         double x =0, z =0, y=0;
 
@@ -127,9 +146,11 @@ public class IslandsManager implements Listener {
                 return;
             }
         }
-        PlayerIsland island = JsonUtils.leerJugadorIslaDesdeJson("plugins/MCzofrenic-Islands/"+player.getName()+"_island.json");
-        if(island != null && islandPos != -1) {
-            activeIslands.set(islandPos, island); //cargar el archivo por si existen cambios
+        //PlayerIsland island = JsonUtils.leerJugadorIslaDesdeJson("plugins/MCzofrenic-Islands/"+player.getName()+"_island.json");
+        if (islandPos == -1){
+            loadIsland(player, worldName);
+        }
+        if(islandPos != -1) {
             x = activeIslands.get(islandPos).getSpawnX();
             y = activeIslands.get(islandPos).getSpawnY();
             z = activeIslands.get(islandPos).getSpawnZ();
