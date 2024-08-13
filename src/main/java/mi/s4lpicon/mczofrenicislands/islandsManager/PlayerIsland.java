@@ -41,6 +41,54 @@ public class PlayerIsland {
         this.spawn_y = theWorld.getHighestBlockYAt(0, 0);
     }
 
+
+    public int hasPermissions(String player){
+        for(String name : residentPlayers){
+            if (name.equals(player)){
+                return 1;
+            }
+        }
+
+        for(String name : trustedPlayers){
+            if (name.equals(player)){
+                return 2;
+            }
+        }
+        return 0;
+
+    }
+
+    public void addPlayerMember(String player, int permissionLevel){
+        vefOwner();
+        if (hasPermissions(player) > 0){
+            this.owner.sendMessage("El jugador ya tiene permisos");
+            return;
+        }
+        if (permissionLevel == 1){
+            residentPlayers.add(player);
+        } else if (permissionLevel == 2) {
+            trustedPlayers.add(player);
+        }else {
+            this.owner.sendMessage("Ese nivel de permisos no existe!");
+        }
+        this.owner.sendMessage("Añadido");
+    }
+
+    public void removePlayerMember(String player){
+        vefOwner();
+        int levelPermission = hasPermissions(player);
+        if (levelPermission < 1){
+            this.owner.sendMessage("Este jugador no tiene permisos en tu isla!");
+            return;
+        } else if (levelPermission == 1) {
+            residentPlayers.removeIf(name -> name.equals(player));
+        } else if (levelPermission == 2) {
+            trustedPlayers.removeIf(name -> name.equals(player));
+        }else {
+            this.owner.sendMessage("Error al eliminar permisos");
+        }
+    }
+
     public void vefOwner(){
         if (this.owner == null){
             this.owner = Bukkit.getPlayer(this.ownerName);
@@ -84,7 +132,6 @@ public class PlayerIsland {
             owner.sendMessage("Error creating the world.");
         }
     }
-
 
     public void banPlayer(String player){
         vefOwner();
@@ -209,5 +256,21 @@ public class PlayerIsland {
 
     public void setTheWorld(World theWorld) {
         this.theWorld = theWorld;
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerIsland{" +
+                "ownerName='" + ownerName + '\'' +
+                ", \nbannedPlayers=" + bannedPlayers +
+                ", \nresidentPlayers=" + residentPlayers +
+                ", \ntrustedPlayers=" + trustedPlayers +
+                ", \nid=" + id +
+                ", \nspawn_x=" + spawn_x +
+                ", \nspawn_y=" + spawn_y +
+                ", \nspawn_z=" + spawn_z +
+                ", \ntype='" + type + '\'' +
+                ", \nsize='" + size + '\'' +
+                '}';
     }
 }
