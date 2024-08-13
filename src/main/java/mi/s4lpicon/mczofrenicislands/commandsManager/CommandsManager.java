@@ -59,7 +59,29 @@ public class CommandsManager implements CommandExecutor {
                     }
                     return true;
 
-                }else {
+                }else if (args[0].equalsIgnoreCase("remove")) {
+                    if (args.length >= 2) {
+                        IslandsManager.removePlayerOfIsland(args[1], player.getName());
+                    } else {
+                        player.sendMessage("Write the name of a player to remove him of your island");
+                    }
+                    return true;
+
+                }else if (args[0].equalsIgnoreCase("invite")) {
+                    if (args.length >= 2) {
+                        if (args.length >= 3) {
+                            IslandsManager.invitePlayerToIsland(args[1], player.getName(), Integer.parseInt(args[2]));
+                        }else {
+                            player.sendMessage("Escribe el nivel de permisos para el jugador");
+                        }
+                    } else {
+                        player.sendMessage("Write the name of a player to invite him of your island");
+                    }
+                    return true;
+
+                }
+
+                else {
                     player.sendMessage("Correct use: /island create or /island tp");
                     return false;
                 }
@@ -79,7 +101,13 @@ public class CommandsManager implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("devinfo")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
-                IslandsManager.getDevInfo(player);
+
+                if (args.length >= 2 ) {
+                    IslandsManager.getDevInfo(player, Integer.parseInt(args[1]));
+                } else {
+                    IslandsManager.getDevInfo(player);
+                }
+                return true;
             }
         }
         return false;
