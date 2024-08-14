@@ -6,16 +6,27 @@ public class Invitation {
 
     private Player sender;
     private Player receiver;
-    private String uuid;
-    private String islandName;
+    private int permissionLevel;
 
-    public Invitation(Player sender, Player receiver, String island){
+    public Invitation(Player sender, Player receiver, int permissionLevel){
         this.sender = sender;
         this.receiver = receiver;
-        this.islandName = island;
+        this.permissionLevel = permissionLevel;
     }
 
     public void acceptInvitation(){
 
+    }
+
+    public String getSenderName(){
+        return this.sender.getName();
+    }
+
+    public String getReceiverName(){
+        return this.receiver.getName();
+    }
+
+    public int getPermissionLevel(){
+        return this.permissionLevel;
     }
 }
