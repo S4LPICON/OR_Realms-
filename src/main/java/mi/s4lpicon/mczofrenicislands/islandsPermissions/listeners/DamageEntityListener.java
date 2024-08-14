@@ -10,24 +10,36 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 public class DamageEntityListener implements Listener {
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        // Verifica si el atacante es un jugador
         if (event.getDamager() instanceof Player) {
-            Player player = (Player) event.getDamager();
+            Player attacker = (Player) event.getDamager();
             Entity target = event.getEntity();
 
-            // Verifica si el jugador tiene permisos
-            if (IslandsPermissions.blockActionPlayer(player)) {
+            // Verifica si el atacante tiene permisos para realizar acciones en la isla
+            if (IslandsPermissions.blockActionPlayer(attacker, 2)) {
 
-                // Permitir atacar solo mobs hostiles
-                if (isHostileMob(target)) {
-                    return; // No cancela el evento, permite el ataque
-                }
+                // Si el objetivo es otro jugador
+                if (target instanceof Player) {
+                    Player targetPlayer = (Player) target;
 
-                // Bloquear ataques a mascotas y animales de granja
-                if (isPetOrFarmAnimal(target)) {
-                    event.setCancelled(true); // Cancela el evento, bloqueando el ataque
+                    // Verifica si ambos jugadores son residentes de la misma isla
+                    if (arePlayersInSameIsland(attacker, targetPlayer)) {
+                        event.setCancelled(true); // Cancela el evento, bloqueando el ataque
+                    }
+                } else {
+                    // Si el objetivo es una entidad no jugadora
+                    // Bloquea ataques a mascotas y animales de granja si no son residentes de la misma isla
+                    if (isPetOrFarmAnimal(target)) {
+                        event.setCancelled(true); // Cancela el evento, bloqueando el ataque
+                    }
                 }
             }
         }
+    }
+
+    private boolean arePlayersInSameIsland(Player attacker, Player targetPlayer) {
+        return IslandsPermissions.blockActionPlayer(attacker, 2)
+                && IslandsPermissions.blockActionPlayer(targetPlayer, 2);
     }
 
     // Método para verificar si la entidad es un mob hostil
