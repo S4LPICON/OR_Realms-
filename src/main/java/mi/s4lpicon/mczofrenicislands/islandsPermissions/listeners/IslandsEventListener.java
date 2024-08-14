@@ -17,49 +17,42 @@ public class IslandsEventListener implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (IslandsPermissions.blockActionPlayer(event.getPlayer())) {
+        if (IslandsPermissions.blockActionPlayer(event.getPlayer(), 1)) {
             event.setCancelled(true); // Cancela el evento, evitando que el jugador rompa bloques
         }
     }
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (IslandsPermissions.blockActionPlayer(event.getPlayer())) {
+        if (IslandsPermissions.blockActionPlayer(event.getPlayer(),1)) {
             event.setCancelled(true); // Cancela el evento, evitando que el jugador coloque bloques
         }
     }
 
-    @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event) {
-        if (IslandsPermissions.blockActionPlayer(event.getPlayer())) {
-            //event.setCancelled(true); // Cancela el evento, evitando que el jugador interactúe con bloques
-        }
-    }
-
-    @EventHandler
-    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        if (IslandsPermissions.blockActionPlayer(event.getPlayer())) {
-            event.setCancelled(true); // Cancela el evento, evitando que el jugador interactúe con entidades
-        }
-    }
+//    @EventHandler
+   // public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+       // if (IslandsPermissions.blockActionPlayer(event.getPlayer(),2)) {
+        //    event.setCancelled(true); // Cancela el evento, evitando que el jugador interactúe con entidades
+      //  }
+    //}
 
     @EventHandler
     public void onInventoryOpen(InventoryOpenEvent event) {
-        if (IslandsPermissions.blockActionPlayer((Player) event.getPlayer())) {
+        if (IslandsPermissions.blockActionPlayer((Player) event.getPlayer(),2)) {
             event.setCancelled(true); // Cancela el evento, evitando que el jugador abra inventarios
         }
     }
 
     @EventHandler
     public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
-        if (IslandsPermissions.blockActionPlayer(event.getPlayer())) {
+        if (IslandsPermissions.blockActionPlayer(event.getPlayer(),2)) {
             event.setCancelled(true); // Cancela el evento, evitando que el jugador vacíe un balde
         }
     }
 
     @EventHandler
     public void onPlayerBucketFill(PlayerBucketFillEvent event) {
-        if (IslandsPermissions.blockActionPlayer(event.getPlayer())) {
+        if (IslandsPermissions.blockActionPlayer(event.getPlayer(),2)) {
             event.setCancelled(true); // Cancela el evento, evitando que el jugador llene un balde
         }
     }
@@ -72,7 +65,7 @@ public class IslandsEventListener implements Listener {
         // Verifica si el ítem consumido es una Notch Apple (manzana dorada encantada)
         if (consumedItem.getType() == Material.ENCHANTED_GOLDEN_APPLE) {
             // Bloquea el consumo de la Notch Apple
-            if (IslandsPermissions.blockActionPlayer(player)) {
+            if (IslandsPermissions.blockActionPlayer(player,0)) {
                 event.setCancelled(true); // Cancela el evento, evitando que el jugador consuma la Notch Apple
                 player.sendMessage("¡No puedes consumir Notch Apples en esta isla!"); // Mensaje opcional
             }
