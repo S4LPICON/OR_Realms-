@@ -12,6 +12,10 @@ public class InvitationManager {
 
     public static void sendInvitation(Player sender, String receiver, int permission){
         Player preceiver = Bukkit.getPlayer(receiver);
+        if (receiver.equals(sender.getName())){
+            sender.sendMessage("No puedes invitarte a tu propia isla!");
+            return;
+        }
         if (preceiver == null){
             sender.sendMessage("Ese jugador no existe, o no se encuentra conectado!");
             return;
@@ -22,7 +26,8 @@ public class InvitationManager {
             return;
         }
         activeInvitations.add(invitation);
-        preceiver.sendMessage(sender.getName()+" te ha invitado a unirte a su isla!");
+        sender.sendMessage("Has invitado a "+preceiver.getName()+" a tu isla!");
+        preceiver.sendMessage(sender.getName()+" te ha invitado a unirte a su isla! usa /island join para aceptarla");
     }
 
     public static void acceptInvitation(String sender,Player receiver){
@@ -34,14 +39,27 @@ public class InvitationManager {
         }
         IslandsManager.addPlayerToIsland(receiver.getName(), sender, activeInvitations.get(posInvitation).getPermissionLevel());
         receiver.sendMessage("Has aceptado correctamente la invitación de "+sender);
+        activeInvitations.remove(posInvitation);
     }
 
     public static int invitationExist(Player sender, String receiver){
-        for (Invitation invitation : activeInvitations){
-            if (invitation.getSenderName().equals(sender.getName()) && invitation.getReceiverName().equals(receiver)){
-                return activeInvitations.indexOf(invitation);
+        if (sender != null) {
+            for (Invitation invitation : activeInvitations) {
+                if (invitation.getSenderName().equals(sender.getName()) && invitation.getReceiverName().equals(receiver)) {
+                    return activeInvitations.indexOf(invitation);
+                }
             }
         }
         return -1;
+    }
+
+    public static ArrayList<String> getInvitationsOfPlayer(Player receiver){
+        ArrayList<String> invites = new ArrayList<>();
+        for (Invitation invitation : activeInvitations){
+            if (invitation.getReceiverName().equals(receiver.getName())){
+                invites.add(invitation.getSenderName());
+            }
+        }
+        return invites;
     }
 }
