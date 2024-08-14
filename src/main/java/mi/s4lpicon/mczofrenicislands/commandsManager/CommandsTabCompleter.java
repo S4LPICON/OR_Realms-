@@ -48,7 +48,13 @@ public class CommandsTabCompleter implements TabCompleter {
                     }
                     return playerNames; // Retorna la lista de nombres de jugadores
                 } else if (args.length == 2 && args[0].equalsIgnoreCase("join")) {
-                    return InvitationManager.getInvitationsOfPlayer(player);
+                    ArrayList<String> invitations = InvitationManager.getInvitationsOfPlayer(player);
+                    if (invitations.isEmpty()) {
+                        invitations.add("You no have invitations right now!");
+                        return invitations;
+                    } else {
+                        return invitations;
+                    }
                 }
             }
 
