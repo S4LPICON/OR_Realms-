@@ -24,6 +24,20 @@ if (world != null) {
     int playerCount = world.getPlayers().size();
     // Aquí puedes usar playerCount como desees
 }
+
+falta
+
+/island member -> modifica a un miembro especifico como cambiarle los permisos o banearlo
+/island members -> muestra todos los miembros de la isla en un inventario y al que se le de click abre el /island member
+/island settings -> un inventario con 3 casillas la primera para manejar los jugadores, la segunda para reiniciar la isla
+y la tercera para controlar quien entra a la isla opciones: cualquiera, miembros, friends y miembros (imposible añadir aca), nadie y siempre abierto (solo rango)
+
+inventarios
+cuando invita a un jugador seleccionar permisos
+cuando se hace /island member inventario para las opciones del comando
+cuando se hace /island members para mostrar todos los jugadores miembros
+cuando se hace /island settings para las opciones de este commando
+
  */
 
 public class IslandsManager implements Listener {
@@ -61,8 +75,37 @@ public class IslandsManager implements Listener {
             playerOwner.sendMessage("Error al remover jugador de la isla");
             return;
         }
-        activeIslands.get(pos).removePlayerMember(player);
+        playerOwner.sendMessage(activeIslands.get(pos).removePlayerMember(player));
         playerOwner.sendMessage("Se ha eliminado el jugador "+ playerToRemove.getName()+" de la isla!");
+    }
+
+    public static void setPlayerPermissionIsland(Player ownerIsland, String player, int newPermissionLevel){
+        Player player1 = Bukkit.getPlayer(player);
+        int pos = findIsland(ownerIsland);
+        if (pos == -1){
+            ownerIsland.sendMessage("Error island unloaded!");
+            return;
+        }
+        PlayerIsland island = activeIslands.get(pos);
+        ownerIsland.sendMessage(island.setPlayerPermissions(player, newPermissionLevel));
+    }
+    public static void leaveIsland(Player player, String islandOwner){
+        Player playerOwner = Bukkit.getPlayer(islandOwner);
+
+        PlayerIsland island = vefAndLoadIsland(playerOwner);
+        if (island == null){
+            //aqui cargaria la isla y si no hay nadie la descargo
+            player.sendMessage("Error la isla no existe!");
+            return;
+        }
+        int pos = findIsland(playerOwner);
+        if (pos == -1){
+            player.sendMessage("Error al remover jugador de la isla");
+            return;
+        }
+        activeIslands.get(pos).removePlayerMember(player.getName());
+        playerOwner.sendMessage("El jugador "+player.getName()+" ha salido de tu isla!");
+        player.sendMessage("Has salido correctamente de la isla de "+ islandOwner+"!");
     }
 
     public static void addPlayerToIsland(String player, String owner, int levelPermission){
