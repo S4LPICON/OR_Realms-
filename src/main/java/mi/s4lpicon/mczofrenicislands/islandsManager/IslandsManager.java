@@ -64,7 +64,7 @@ public class IslandsManager implements Listener {
         playerOwner.sendMessage("Se ha eliminado el jugador "+ playerToRemove.getName()+" de la isla!");
     }
 
-    public static void invitePlayerToIsland(String player, String owner, int levelPermission){
+    public static void addPlayerToIsland(String player, String owner, int levelPermission){
 
         Player playerToInvite = Bukkit.getPlayer(player);
         Player playerOwner = Bukkit.getPlayer(owner);
@@ -102,6 +102,9 @@ public class IslandsManager implements Listener {
     }
 
     public static PlayerIsland vefAndLoadIsland(Player owner){
+        if (owner == null){
+            return null;
+        }
         if (Bukkit.getWorld("PlayerIslands/" + owner.getName()) == null){
             return null;
         }
@@ -150,15 +153,13 @@ public class IslandsManager implements Listener {
 
         if (islandPos != -1) {
             if (activeIslands.get(islandPos).findBannedPlayer(player.getName()) != -1
-                && !player.isOp() || !player.hasPermission("mczofrenicisland.admin")){
+                    && (!player.isOp() && !player.hasPermission("mczofrenicisland.admin"))) {
                 player.sendMessage("¡Error, you are banned from this island!");
                 return;
             }
         }
 
         World world = Bukkit.getWorld("PlayerIslands/" + worldName);
-
-        double x =0, z =0, y=0;
 
         // If the world is not loaded, try to load it
         if (world == null) {
@@ -170,22 +171,26 @@ public class IslandsManager implements Listener {
                 return;
             }
         }
+        islandPos = findIsland(playerIslandOwner);
         //PlayerIsland island = JsonUtils.leerJugadorIslaDesdeJson("plugins/MCzofrenic-Islands/"+player.getName()+"_island.json");
         if (islandPos == -1){
             loadIsland(player, worldName);
         }
         if(islandPos != -1) {
-            x = activeIslands.get(islandPos).getSpawnX();
-            y = activeIslands.get(islandPos).getSpawnY();
-            z = activeIslands.get(islandPos).getSpawnZ();
+            double x = activeIslands.get(islandPos).getSpawnX();
+            double y = activeIslands.get(islandPos).getSpawnY();
+            double z = activeIslands.get(islandPos).getSpawnZ();
+            // Set the location in the world (0, 0, 0)
+            Location location = new Location(world, x, y, z);
+
+            // Tp the player to the specified location
+            player.teleport(location);
+            player.sendMessage("You have teleported to the " + worldName + "'s island!");
+        }else {
+            player.sendMessage("Ocurrio un error al mandarte a esa isla!");
         }
 
-        // Set the location in the world (0, 0, 0)
-        Location location = new Location(world, x, y, z);
 
-        // Tp the player to the specified location
-        player.teleport(location);
-        player.sendMessage("You have teleported to the " + worldName + "'s island!");
     }
     public static void sendPlayerToSpawn(Player player){
         String spawnName = "LaCapital";
