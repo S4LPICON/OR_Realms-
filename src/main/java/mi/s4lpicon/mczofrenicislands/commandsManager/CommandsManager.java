@@ -81,7 +81,7 @@ public class CommandsManager implements CommandExecutor {
                     }
                     return true;
 
-nu                }else if (args[0].equalsIgnoreCase("join")) {
+                }else if (args[0].equalsIgnoreCase("join")) {
                     if (args.length >= 2) {
                             InvitationManager.acceptInvitation(args[1],player);
                     } else {
