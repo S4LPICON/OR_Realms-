@@ -81,6 +81,22 @@ public class CommandsManager implements CommandExecutor {
                     }
                     return true;
 
+nu                }else if (args[0].equalsIgnoreCase("join")) {
+                    if (args.length >= 2) {
+                            InvitationManager.acceptInvitation(args[1],player);
+                    } else {
+                        player.sendMessage("Escribe el nombre de la persona que te invito para aceptarle la invitacion!");
+                    }
+                    return true;
+
+                }else if (args[0].equalsIgnoreCase("leave")) {
+                    if (args.length >= 2) {
+                        IslandsManager.removePlayerOfIsland(player.getName(), args[1]); //acceptInvitation(args[1],player)
+                    } else {
+                        player.sendMessage("Escribe el nombre del dueño de la isla!");
+                    }
+                    return true;
+
                 }
 
                 else {
