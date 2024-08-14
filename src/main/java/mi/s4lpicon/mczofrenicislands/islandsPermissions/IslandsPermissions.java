@@ -20,7 +20,7 @@ public class IslandsPermissions {
         }
     }
 
-    public static boolean blockActionPlayer(Player player){
+    public static boolean blockActionPlayer(Player player, int levelRequired){
         if(player.isOp() || player.hasPermission("mczofrenicisland.admin")){
             return false;
         }
@@ -36,7 +36,7 @@ public class IslandsPermissions {
             player.sendMessage("Mega error detectado reportalo!"); //es imposible que el mundo en el que se encuentra, esté descargado
             return false;
         }
-        if (IslandsManager.activeIslands.get(pos).hasPermissions(player.getName()) <= 1
+        if (IslandsManager.activeIslands.get(pos).hasPermissions(player.getName()) < levelRequired
                 && !(player.getName().equals(playerOwnerName))) {
             return true;
         }
