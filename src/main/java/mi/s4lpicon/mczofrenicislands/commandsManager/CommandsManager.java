@@ -91,7 +91,15 @@ public class CommandsManager implements CommandExecutor {
 
                 }else if (args[0].equalsIgnoreCase("leave")) {
                     if (args.length >= 2) {
-                        IslandsManager.removePlayerOfIsland(player.getName(), args[1]); //acceptInvitation(args[1],player)
+                        IslandsManager.leaveIsland(player, args[1]); //acceptInvitation(args[1],player)
+                    } else {
+                        player.sendMessage("Escribe el nombre del dueño de la isla!");
+                    }
+                    return true;
+
+                }else if (args[0].equalsIgnoreCase("member")) {
+                    if (args.length >= 2) {
+                        IslandsManager.leaveIsland(player, args[1]); //acceptInvitation(args[1],player)
                     } else {
                         player.sendMessage("Escribe el nombre del dueño de la isla!");
                     }
@@ -100,7 +108,7 @@ public class CommandsManager implements CommandExecutor {
                 }
 
                 else {
-                    player.sendMessage("Correct use: /island create or /island tp");
+                    player.sendMessage("Correct use: /island <command>");
                     return false;
                 }
             } else {
