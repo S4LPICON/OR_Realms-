@@ -1,5 +1,6 @@
 package mi.s4lpicon.mczofrenicislands.commandsManager;
 
+import mi.s4lpicon.mczofrenicislands.invitationManager.InvitationManager;
 import mi.s4lpicon.mczofrenicislands.islandsManager.IslandsManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -70,7 +71,8 @@ public class CommandsManager implements CommandExecutor {
                 }else if (args[0].equalsIgnoreCase("invite")) {
                     if (args.length >= 2) {
                         if (args.length >= 3) {
-                            IslandsManager.invitePlayerToIsland(args[1], player.getName(), Integer.parseInt(args[2]));
+                            //IslandsManager.invitePlayerToIsland(args[1], player.getName(), Integer.parseInt(args[2]));
+                            InvitationManager.sendInvitation(player, args[1],Integer.parseInt(args[2]));
                         }else {
                             player.sendMessage("Escribe el nivel de permisos para el jugador");
                         }
