@@ -40,7 +40,28 @@ public class PlayerIsland {
         this.spawn_y = theWorld.getHighestBlockYAt(0, 0);
     }
 
-
+    public String setPlayerPermissions(String player, int levelPermission){
+        vefOwner();
+        int actualPermi = hasPermissions(player);
+        if ( actualPermi < 1){
+            return "El jugador aun no tiene permisos en tu isla!";
+        } else if (actualPermi == 1) {
+            //es residente
+            residentPlayers.removeIf(name -> name.equals(player));
+        } else if (actualPermi == 2) {
+            //es trusted
+            trustedPlayers.removeIf(name -> name.equals(player));
+        }
+        switch (levelPermission) {
+            case 1:
+                residentPlayers.add(player);
+                break;
+            case 2:
+                trustedPlayers.add(player);
+                break;
+        }
+        return "Se ha cambiado correctamente los permisos!";
+    }
     public int hasPermissions(String player){
         for(String name : residentPlayers){
             if (name.equals(player)){
@@ -74,18 +95,18 @@ public class PlayerIsland {
         this.owner.sendMessage("Se ha añadido correctamente a "+ player+"!");
     }
 
-    public void removePlayerMember(String player){
+    public String removePlayerMember(String player){
         vefOwner();
         int levelPermission = hasPermissions(player);
         if (levelPermission < 1){
-            this.owner.sendMessage("Este jugador no tiene permisos en tu isla!");
+            return "Este jugador no tiene permisos en tu isla!";
         } else if (levelPermission == 1) {
             residentPlayers.removeIf(name -> name.equals(player));
         } else if (levelPermission == 2) {
             trustedPlayers.removeIf(name -> name.equals(player));
-        }else {
-            this.owner.sendMessage("Error al eliminar permisos");
         }
+        return "Error al eliminar permisos";
+
     }
 
     public void vefOwner(){
