@@ -24,6 +24,9 @@ public class IslandsPermissions {
         if(player.isOp() || player.hasPermission("mczofrenicisland.admin")){
             return false;
         }
+        if (player.getWorld().getName().equals("LaCapital")){
+            return false;
+        }
         String playerOwnerName = IslandsPermissions.getStringAfterSlash(player.getWorld().getName());
         Player islandOwner = Bukkit.getPlayer(playerOwnerName);
         assert islandOwner != null;
