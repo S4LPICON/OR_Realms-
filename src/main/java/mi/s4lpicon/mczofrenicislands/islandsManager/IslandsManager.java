@@ -48,7 +48,8 @@ public class IslandsManager implements Listener {
         assert playerOwner != null;
         PlayerIsland island = vefAndLoadIsland(playerOwner);
         if (island == null){
-            playerOwner.sendMessage("Error tu isla es nula!");
+            //aqui cargaria la isla y si no hay nadie la descargo
+            playerOwner.sendMessage("Error la isla no existe!");
             return;
         }
         if(playerToRemove == null){
@@ -176,6 +177,7 @@ public class IslandsManager implements Listener {
         if (islandPos == -1){
             loadIsland(player, worldName);
         }
+        islandPos = findIsland(playerIslandOwner);
         if(islandPos != -1) {
             double x = activeIslands.get(islandPos).getSpawnX();
             double y = activeIslands.get(islandPos).getSpawnY();
