@@ -14,10 +14,6 @@ public class Invitation {
         this.permissionLevel = permissionLevel;
     }
 
-    public void acceptInvitation(){
-
-    }
-
     public String getSenderName(){
         return this.sender.getName();
     }
