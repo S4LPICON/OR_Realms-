@@ -21,3 +21,9 @@ permissions:
   mczofrenicisland.admin:
     description: "Permite al jugador administrar el plugin"
     default: op
+  mczofrenicisland.vip:
+    description: "Permite al jugador acceder a benefices vip"
+  mczofrenicisland.pro:
+    description: "Permite al jugador acceder a benefices pro"
+  mczofrenicisland.elite:
+    description: "Permite al jugador acceder a benefices elite"
