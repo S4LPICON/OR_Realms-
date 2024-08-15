@@ -14,6 +14,11 @@ public class JsonUtils {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public static void guardarJugadorIslaEnJson(PlayerIsland jugadorIsla) {
+        if (jugadorIsla == null) {
+            // Maneja el caso donde jugadorIsla es null, tal vez con un mensaje de error o alguna otra lógica.
+            System.out.println("Error: jugadorIsla es null. No se puede guardar en JSON.");
+            return;
+        }
         String rutaArchivo = "plugins/MCzofrenic-Islands/" + jugadorIsla.getOwnerName() + "_island.json";
         // Crear una instancia de Gson con configuración para incluir solo campos anotados con @Expose
         // y formatear el JSON de manera legible.
