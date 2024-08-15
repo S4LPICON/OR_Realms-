@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /*
 NO BORRAR ESTA INFORMATION HASTA NO SER IMPLEMENTADA
@@ -138,7 +139,15 @@ public class IslandsManager implements Listener {
             player.sendMessage(ChatColor.RED+"Ya tienes un mundo creado no se puede crear otro!");
             return;
         }
-        PlayerIsland island = new PlayerIsland(player.getName(), 1, "Esta Isla es la polla", "Gigante");
+        String size;
+        if (player.hasPermission("mczofrenicisland.elite") || player.isOp()){
+            size = "BIG";
+        } else if (player.hasPermission("mczofrenicisland.pro")) {
+            size = "MEDIUM";
+        }else {
+            size = "SMALL";
+        }
+        PlayerIsland island = new PlayerIsland(player.getName(), 1, "NORMAL", size);
         activeIslands.add(island);
         // Guardar el objeto en un archivo JSON
         sendPlayerToWorld(player, player.getName());
@@ -190,8 +199,8 @@ public class IslandsManager implements Listener {
         Player playerIslandOwner = Bukkit.getPlayer(worldName);
         int islandPos = findIsland(playerIslandOwner);
 
-        if( islandPos == -1 && !(player.getName().equals(worldName))){
-            player.sendMessage("¡Error, the island is disabled");
+        if (!Objects.requireNonNull(playerIslandOwner).isOnline() && (islandPos == -1 || !player.getName().equals(worldName))) {
+            player.sendMessage("¡Error! The island is disabled.");
             return;
         }
 
@@ -223,7 +232,7 @@ public class IslandsManager implements Listener {
         islandPos = findIsland(playerIslandOwner);
         if(islandPos != -1) {
             double x = activeIslands.get(islandPos).getSpawnX();
-            double y = activeIslands.get(islandPos).getSpawnY();
+            double y = activeIslands.get(islandPos).getSpawnY()+1;
             double z = activeIslands.get(islandPos).getSpawnZ();
             // Set the location in the world (0, 0, 0)
             Location location = new Location(world, x, y, z);
@@ -252,7 +261,10 @@ public class IslandsManager implements Listener {
 
     public static World loadIsland(Player player, String worldName) {
         PlayerIsland island = JsonUtils.leerJugadorIslaDesdeJson("plugins/MCzofrenic-Islands/"+player.getName()+"_island.json");
-        activeIslands.add(island);
+        if(island != null){
+            activeIslands.add(island);
+        }
+
         player.sendMessage("Active islands before load world: "+activeIslands);
         // Check if the world exists before loading it
         World world = Bukkit.getWorld("PlayerIslands/" + worldName);
