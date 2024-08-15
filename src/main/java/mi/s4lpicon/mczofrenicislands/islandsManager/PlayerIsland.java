@@ -1,11 +1,13 @@
 package mi.s4lpicon.mczofrenicislands.islandsManager;
 
 import com.google.gson.annotations.Expose;
+import mi.s4lpicon.mczofrenicislands.worldGeneration.GenericWorldGeneration;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 
 public class PlayerIsland {
 
@@ -29,15 +31,22 @@ public class PlayerIsland {
     private World theWorld;
 
     public PlayerIsland(String player, int id, String type, String size){
+
         this.owner = Bukkit.getPlayer(player);
         this.id = id;
         this.type = type;
         this.size = size;
         this.ownerName = player;
-        this.spawn_x = 0;
-        this.spawn_z = 0;
+        this.spawn_x = rNum();
+        this.spawn_z = rNum();
         generateWorld();
         this.spawn_y = theWorld.getHighestBlockYAt(0, 0);
+    }
+    private int rNum(){
+        Random random = new Random();
+        int min = 0;
+        int max = 255;
+        return random.nextInt((max - min) + 1) + min;
     }
 
     public String setPlayerPermissions(String player, int levelPermission){
@@ -119,10 +128,6 @@ public class PlayerIsland {
         // Specify the world name
         String worldName = "PlayerIslands/" + this.owner.getName();
 
-        // Set up the world creator
-        WorldCreator creator = new WorldCreator(worldName);
-        creator.environment(World.Environment.NORMAL); // Environment type
-        creator.type(WorldType.FLAT); // World type
 
         // Check if the world already exists
         World existingWorld = Bukkit.getWorld(worldName);
@@ -132,21 +137,9 @@ public class PlayerIsland {
             return;
         }
 
-        // Create the world
-        World world = creator.createWorld();
-        if (world != null) {
+        World world = GenericWorldGeneration.genGenericWorld(this.owner, worldName, this.type, this.size, this.spawn_x, this.spawn_z);
+        if (world != null){
             this.theWorld = world;
-
-            // Set the edge of the world
-            WorldBorder border = world.getWorldBorder();
-            border.setCenter(0, 0);
-            border.setSize(500);
-            border.setWarningDistance(10);
-            border.setDamageAmount(2.0);
-
-            owner.sendMessage("World created successfully.");
-        } else {
-            owner.sendMessage("Error creating the world.");
         }
     }
 
