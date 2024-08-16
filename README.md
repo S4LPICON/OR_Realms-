@@ -33,7 +33,7 @@
   <li><code>/island reset</code> <br>
     <em>#EN DESARROLLO</em></li>
   <li><code>/island setspawn</code> <br>
-    Establece el punto de aparición en tu isla, para usar con <code>/island tp</code>.</li>
+    Establece el punto de aparición de tu isla.</li>
   <li><code>/island settings</code> <br>
     <em>#EN DESARROLLO</em></li>
   <li><code>/island tp [Player]</code> <br>
