@@ -73,7 +73,7 @@ Los archivos son en formato <code>.json</code> y contienen toda la información 
 <h2><strong>Consideraciones</strong></h2>
 <blockquote>
   <p><strong>Nota:</strong><br>
-  El plugin aún está en desarrollo. Las funciones más importantes que faltan son:</p>
+  El plugin está fuera de desarrollo (estoy trabajando en una versión más optimizada y escalable). Las funciones más importantes que faltan son:</p>
   <ul>
     <li>Carga y descarga de islas para algunas situaciones.</li>
     <li>Implementación de los comandos faltantes.</li>
